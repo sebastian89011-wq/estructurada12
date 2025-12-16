@@ -1,0 +1,348 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+char *my_gets(char *cadena, int tamano)
+{
+    size_t longitud;
+    fflush(stdin);
+    fgets(cadena, tamano, stdin);
+    if (cadena)
+    {
+        longitud = strlen(cadena);
+        if (longitud > 0 && cadena[longitud - 1] == '\n')
+        {
+            cadena[longitud - 1] = '\0';
+        }
+        return cadena;
+    }
+    return NULL;
+}
+
+void limpiarBuffer() 
+{
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+
+int contar_caracteres(char cadena[])
+{
+    int i=0;
+    do
+    {
+        i++;
+    }while(cadena[i]!='\0');
+    return i;
+        
+
+}
+
+
+
+int busqueda_secuencial_vector(int vector[], int n, int valor)
+{
+	int i;
+	for(i=0; i<n; i++)
+	{
+		if(vector[i] == valor)
+		{
+			return i;
+		}
+
+	}
+	return -1;
+}
+
+int busqueda_secuencial_matriz( int matriz[4][4],  int valor  )
+{
+    int i,j;
+
+    for(i=0;i<4;i++)
+    {
+        for(j=0;j<4;j++)
+        {
+            if(matriz[i][j] == valor)
+            {
+                return 1;
+            }
+        }
+    }
+
+
+    return -1;
+}
+
+int validar_num() {
+    char cadena[30];
+    int valor = 0, i = 0;
+
+    fgets(cadena, 30, stdin);
+
+   
+    while(cadena[i] == ' ' || cadena[i] == '\t') i++;
+
+    if (cadena[i] == '\n' || cadena[i] == '\0') 
+        return -1;
+
+    for (; cadena[i] != '\0' && cadena[i] != '\n'; i++) {
+        if (cadena[i] >= '0' && cadena[i] <= '9') {
+            valor = valor * 10 + (cadena[i] - '0');
+        } else {
+            return -1; 
+        }
+    }
+
+    return valor;
+}
+
+int buscar_valor(int vector[], int n, int valor)
+{
+    int i,bandera;
+    for(i=0;i<n;i++)
+    {
+        if(vector[i] == valor)
+        {
+            return i;
+
+        }
+    
+    }
+    return -1;
+    
+    
+}
+
+
+
+
+
+
+
+
+typedef struct _alumno
+{
+    int edad;
+    char nombre[30];
+    char paterno[30];
+    char materno[30];
+    int matricula;
+    int sexo;
+
+} Alumno;
+
+void agregar_automatico(Alumno alumnos[]);
+void agregar_manual(Alumno alumnos[]);
+void eliminar_registro(Alumno alumnos[]);
+void buscar_alumno(Alumno alumnos[]);
+void ordenar_registros(Alumno alumnos[]);
+void imprimir_registros(Alumno alumnos[]);
+void nombres_aleatorios(char nombre[], char paternos[], char maternos[]);
+
+int main()
+{
+    int opcion, numero;
+    Alumno alumnos[10];
+    srand(time(NULL));
+
+    do
+    {
+
+        printf("\n===== MENU PRINCIPAL =====\n");
+        printf("1. AGREGAR (AUTOMÁTICO 10 REGISTROS)\n");
+        printf("2. AGREGAR MANUAL\n");
+        printf("3. ELIMINAR REGISTRO (lógico)\n");
+        printf("4. BUSCAR\n");
+        printf("5. ORDENAR\n");
+        printf("6. IMPRIMIR\n");
+        printf("7. SALIR\n");
+        printf("Seleccione una opción: ");
+        opcion = validar_num();
+        if (opcion == -1)
+        {
+            printf("Error: no es un número válido.\n");
+        }
+
+        switch (opcion)
+        {
+        case 1:
+            agregar_automatico(alumnos);
+            break;
+        case 2:
+            agregar_manual(alumnos);
+            break;
+        case 3:
+            eliminar_registro(alumnos);
+            break;
+        case 4:
+            buscar_alumno(alumnos);
+            break;
+        case 5:
+            ordenar_registros(alumnos);
+            break;
+        case 6:
+            imprimir_registros(alumnos);
+            break;
+        case 7:
+            printf("\nSaliendo del programa...\n");
+            break;
+        default:
+            printf("\nOpción inválida. Intente de nuevo.\n");
+        }
+    } while (opcion != 7);
+
+    return 0;
+}
+
+void agregar_automatico(Alumno alumnos[])
+{
+    int i, n = 0;
+    int matriculas[10];
+    printf("\nFUNCION AGREGAR AUTOMÁTICO\n");
+    char nombre[20];
+    char paternos[20];
+    char maternos[20];
+
+    for (i = 0; i < 10; i++)
+    {
+        do
+        {
+            alumnos[i].matricula = rand() % (400000 - 100000 + 1) + 100000;
+        } while (busqueda_secuencial_vector(matriculas, i, alumnos[i].matricula) != -1);
+
+        matriculas[i] = alumnos[i].matricula;
+    }
+
+    for (i = 0; i < 10; i++)
+    {
+        alumnos[i].edad = rand() % (30 - 17 + 1) + 17;
+        nombres_aleatorios(nombre, paternos, maternos);
+        strcpy(alumnos[i].nombre, nombre);
+        strcpy(alumnos[i].paterno, paternos);
+        strcpy(alumnos[i].materno, maternos);
+    }
+
+    printf("\nMATRICULA |    NOMBRE    |    APELLIDO.P    |    APELLIDO.M    | EDAD |");
+    for (i = 0; i < 10; i++)
+    {
+        printf("\n%9d | %-12s | %-16s | %-16s | %3d", matriculas[i], alumnos[i].nombre, alumnos[i].paterno, alumnos[i].materno, alumnos[i].edad);
+    }
+}
+
+void agregar_manual(Alumno alumnos[])
+{
+    int i;
+    int matriculas[10];
+    int edad[10];
+    char nombre[20];
+    char paternos[20];
+    char maternos[20];
+    printf("\nFUNCION AGREGAR MANUAL\n");
+    
+    for(i=0;i<2;i++)
+    {
+    do
+    {
+    printf("\nINGRESAR MATRICULA: ");
+    scanf("%d",&alumnos[i].matricula);
+    }while(busqueda_secuencial_vector(matriculas,i,alumnos[i].matricula) != -1);
+    limpiarBuffer();    printf("\nINGRESAR NOMBRE: ");
+    my_gets(alumnos[i].nombre,20);
+    printf("\nAPELLIDO.P: ");
+    my_gets(alumnos[i].paterno,20);
+    printf("\nAPELLIDO.M:");
+    my_gets(alumnos[i].materno,20);
+    
+    printf("\nEDAD:");
+    scanf("%d",&alumnos[i].edad);
+    limpiarBuffer(); 
+    }
+    
+    for(i=0;i<2;i++)
+    {
+        printf("\nMATRICULA = %d",alumnos[i].matricula);
+        printf("\nNOMBRE = %s ",alumnos[i].nombre);
+        printf("\nAPELLIDO.P = %s ",alumnos[i].paterno);
+        printf("\nAPELLIDO.P = %s",alumnos[i].materno);
+        printf("\nEDAD = %d",alumnos[i].edad);
+    }
+}
+
+void eliminar_registro(Alumno alumnos[])
+{
+    printf("\nFUNCION ELIMINAR\n");
+    
+    
+    
+}
+
+void buscar_alumno(Alumno alumnos[])
+{
+    printf("\n[FUNCION BUSCAR - PENDIENTE]\n");
+}
+
+void ordenar_registros(Alumno alumnos[])
+{
+    printf("\n[FUNCION ORDENAR - PENDIENTE]\n");
+}
+
+void imprimir_registros(Alumno alumnos[])
+{
+    printf("\n[FUNCION IMPRIMIR - PENDIENTE]\n");
+}
+
+void nombres_aleatorios(char nombre[], char paternos[], char maternos[])
+{
+
+    char nombres[107][20] = {" Carlos", "Pedro", "Yepiz", "Leonardo", "Fernando", "Filoberto", "Juan", "María", "Carlos", "Ana", "Luis", "Sofía", "Pedro", "Valeria",
+                          "José", "Camila", "Miguel", "Lucía", "Fernando", "Isabela", "Diego",
+                          "Martina", "Ricardo", "Natalia", "Andrés", "Paula", "Santiago",
+                          "Julieta", "Javier", "Fernanda", "Alejandro", "Carolina", "Manuel",
+                          "Gabriela", "Héctor", "Mariana", "Raúl", "Daniela", "Víctor", "Renata",
+                          "Óscar", "Laura", "Pablo", "Francisco", "Elena", "Emilio", "Patricia",
+                          "Enrique", "Claudia", "Roberto", "Verónica", "Eduardo", "Mónica",
+                          "Diego", "Lorena", "Antonio", "Juliana", "Ricardo", "Sandra", "Mario",
+                          "Cecilia", "Hugo", "Silvia", "Alberto", "Beatriz", "Jorge", "Carla",
+                          "Miguel Ángel", "Natalia", "Cristian", "Adriana", "Raúl", "Fabiola",
+                          "Sergio", "Marcela", "Alfonso", "Daniela", "Andrés", "Vanessa",
+                          "Guillermo", "Clara", "Rafael", "Lorena", "Roberto", "Marisol",
+                          "Eduardo", "Jessica", "Víctor", "Camila", "José Luis", "Carolina",
+                          "Fernando", "María José", "Ángel", "Valentina", "Pablo", "Gabriela",
+                          "Luis Miguel", "Antonella", "Diego", "Fernanda", "Ricardo", "Isabella",
+                          "Sebastián", "Paola", "Juan Carlos", "Daniela"};
+
+    int i = rand() % 107;
+    int i2 = rand() % 90;
+    int i3 = rand() % 97;
+
+    strcpy(nombre, nombres[i]);
+
+    char paterno[90][20] = {"García", "Hernández", "López", "Martínez", "González", "Pérez", "Sánchez", "Ramírez",
+                          "Torres", "Flores", "Rivera", "Gómez", "Díaz", "Vargas", "Romero", "Rojas",
+                          "Castillo", "Ortiz", "Silva", "Jiménez", "Morales", "Cruz", "Mendoza", "Aguilar",
+                          "Medina", "Castro", "Suárez", "Ramos", "Vega", "Guerrero", "Reyes", "Soto",
+                          "Navarro", "Domínguez", "Chávez", "Paredes", "Delgado", "Herrera", "Román", "Valencia",
+                          "Palacios", "Cordero", "Cabrera", "Cisneros", "Marín", "Escobar", "Quintero", "Aguirre",
+                          "Salazar", "Bonilla", "Carrillo", "Figueroa", "Barrera", "Hurtado", "Cárdenas", "Peña",
+                          "Sandoval", "Gutiérrez", "Mora", "Sáenz", "Luna", "Mejía", "Bravo", "Parra", "Castañeda",
+                          "Montoya", "Vargas", "Pinto", "Maldonado", "Palma", "Cruz", "Orozco", "Ríos", "Varela",
+                          "Camacho", "Lara", "Pacheco", "León", "Córdova", "Escalante", "Rincón", "Valenzuela",
+                          "Solís", "Carrasco", "Bravo", "Torres", "Villanueva", "Chávez", "Barrios", "Arias"};
+    strcpy(paternos, paterno[i2]);
+
+    char materno[97][20] = {"Gómez", "Ramírez", "Torres", "Flores", "Vargas", "Rojas", "Castillo", "Ortiz",
+                          "Silva", "Jiménez", "Morales", "Cruz", "Mendoza", "Aguilar", "Medina", "Castro",
+                          "Suárez", "Ramos", "Vega", "Guerrero", "Reyes", "Soto", "Navarro", "Domínguez",
+                          "Chávez", "Paredes", "Delgado", "Herrera", "Román", "Valencia", "Palacios", "Cordero",
+                          "Cabrera", "Cisneros", "Marín", "Escobar", "Quintero", "Aguirre", "Salazar", "Bonilla",
+                          "Carrillo", "Figueroa", "Barrera", "Hurtado", "Cárdenas", "Peña", "Sandoval", "Gutiérrez",
+                          "Mora", "Sáenz", "Luna", "Mejía", "Bravo", "Parra", "Castañeda", "Montoya", "Varela",
+                          "Camacho", "Lara", "Pacheco", "León", "Córdova", "Escalante", "Rincón", "Valenzuela",
+                          "Solís", "Carrasco", "Villanueva", "Barrios", "Arias", "Cáceres", "Acosta", "Benítez",
+                          "Farias", "Ojeda", "Tapia", "Palacios", "Cáceres", "Sáenz", "Rebolledo", "Ramos",
+                          "Vallejo", "Guevara", "Bermúdez", "Meza", "Pizarro", "Galarza", "Chavarría", "Fuentes",
+                          "Alvarado", "Cordero", "Ponce", "Guzmán", "Montes", "Orellana", "Bravo", "Carranza"};
+
+    strcpy(maternos, materno[i3]);
+}

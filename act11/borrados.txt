@@ -1,0 +1,7 @@
+312.-  330748      PEDRO           PEREZ            GARCIA              42      MASCULINO
+
+342.-  321215      JAVIER          AGUIRRE          MONTOYA             30      MASCULINO
+1155.-  399500      JORGE           DOMINGUEZ        PALACIOS            32      FEMENINO
+1148.-  397855      JOSE            GOMEZ            DOMINGUEZ           18      MASCULINO
+1080.-  374393      CAROLINA        VARELA           RAMOS               30      FEMENINO
+322.-  309894      CAMILA          AGUIRRE          VARGAS              20      MASCULINO
